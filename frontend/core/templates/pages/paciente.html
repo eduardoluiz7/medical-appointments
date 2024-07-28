@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center">
+        <h2>Pacientes</h2>
+        <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#novoPacienteModal">
+            <i class="bi bi-plus"></i>
+            Novo Paciente
+        </button>
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>CPF</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for paciente in pacientes %}
+            <tr data-id="{{ paciente.id }}">
+                <td>{{ paciente.name }}</td>
+                <td>{{ paciente.email }}</td>
+                <td>{{ paciente.document }}</td>
+                <td>
+                    <a 
+                    href="#" 
+                    class="btn btn-warning btn-sm"
+                    data-bs-toggle="modal"
+                    data-bs-target="#editarPacienteModal"
+                    data-id="{{ paciente.id }}" 
+                    data-name="{{ paciente.name }}" 
+                    data-email="{{ paciente.email }}" 
+                    data-document="{{ paciente.document }}">
+                        <i class="bi bi-pencil"></i>
+                        Editar
+                    </a>
+                    <a 
+                    href="#" 
+                    class="btn btn-danger btn-sm delete-button"
+                    data-id="{{ paciente.id }}">
+                        <i class="bi bi-trash"></i>
+                        Deletar
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal para criar novo paciente -->
+<div class="modal fade" id="novoPacienteModal" tabindex="-1" aria-labelledby="novoPacienteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="novoPacienteModalLabel">Novo Paciente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="novoPacienteForm">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nome</label>
+                        <input type="text" class="form-control" id="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">E-mail</label>
+                        <input type="email" class="form-control" id="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="document" class="form-label">CPF</label>
+                        <input type="text" class="form-control" id="documentNumber" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para editar paciente -->
+<div class="modal fade" id="editarPacienteModal" tabindex="-1" aria-labelledby="editarPacienteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editarPacienteModalLabel">Editar Paciente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editarPacienteForm">
+                    <input type="hidden" id="edit-paciente-id">
+                    <div class="mb-3">
+                        <label for="edit-name" class="form-label">Nome</label>
+                        <input type="text" class="form-control" id="edit-name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-email" class="form-label">E-mail</label>
+                        <input type="email" class="form-control" id="edit-email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-document" class="form-label">CPF</label>
+                        <input type="text" class="form-control" id="edit-document" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Atualizar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

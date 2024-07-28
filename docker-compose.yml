@@ -1,0 +1,51 @@
+version: '3.9'
+
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: api_container
+    volumes:
+      - ./api:/app
+    environment:
+      - DJANGO_SETTINGS_MODULE=appointments_api.settings
+    command: python ./manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    networks:
+      - web
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend_container
+    volumes:
+      - ./frontend:/app
+    environment:
+      - DJANGO_SETTINGS_MODULE=appointments_frontend.settings
+    command: python ./manage.py runserver 0.0.0.0:8001
+    ports:
+      - "8001:8001"
+    networks:
+      - web
+
+  db:
+    image: postgres:13
+    container_name: postgres_container
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - web 
+
+networks:
+  web:
+    driver: bridge
+volumes:
+  postgres_data:

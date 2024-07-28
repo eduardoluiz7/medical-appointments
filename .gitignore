@@ -1,0 +1,24 @@
+# Django #
+*.log
+*.pot
+*.pyc
+__pycache__/
+
+# Static files (usually collected by Django's collectstatic) #
+staticfiles/
+
+# Media files #
+media/
+
+# Virtual environment #
+venv/
+.env
+
+# IDE files #
+.vscode/
+*.idea/
+
+# Dependencies #
+*.egg-info/
+dist/
+build/

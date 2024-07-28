@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center">
+        <h2>Profissionais</h2>
+        <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#novoProfissionalModal">
+            <i class="bi bi-plus"></i>
+            Novo Profissional
+        </button>
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>CPF</th>
+                <th>Especialidade</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for profissional in profissionais %}
+            <tr data-id="{{ profissional.id }}">
+                <td>{{ profissional.name }}</td>
+                <td>{{ profissional.email }}</td>
+                <td>{{ profissional.document }}</td>
+                <td>{{ profissional.specialty }}</td>
+                <td>
+                    <a 
+                    href="#" 
+                    class="btn btn-warning btn-sm"
+                    data-bs-toggle="modal"
+                    data-bs-target="#editarProfissionalModal"
+                    data-id="{{ profissional.id }}" 
+                    data-name="{{ profissional.name }}" 
+                    data-email="{{ profissional.email }}" 
+                    data-document="{{ profissional.document }}"
+                    data-specialty="{{ profissional.specialty}}"
+                    >
+                        <i class="bi bi-pencil"></i>
+                        Editar
+                    </a>
+                    <a 
+                    href="#" 
+                    class="btn btn-danger btn-sm delete-button"
+                    data-id="{{ profissional.id }}">
+                        <i class="bi bi-trash"></i>
+                        Deletar
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal para criar novo profissional -->
+<div class="modal fade" id="novoProfissionalModal" tabindex="-1" aria-labelledby="novoProfissionalModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="novoProfissionalModalLabel">Novo Profissional</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="novoProfissionalForm">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nome</label>
+                        <input type="text" class="form-control" id="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">E-mail</label>
+                        <input type="email" class="form-control" id="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="document" class="form-label">CPF</label>
+                        <input type="text" class="form-control" id="documentNumber" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="specialty" class="form-label">Especialidade</label>
+                        <input type="text" class="form-control" id="specialty" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para editar profissional -->
+<div class="modal fade" id="editarProfissionalModal" tabindex="-1" aria-labelledby="editarProfissionalModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editarProfissionalModalLabel">Editar Profissional</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editarProfissionalForm">
+                    <input type="hidden" id="edit-profissional-id">
+                    <div class="mb-3">
+                        <label for="edit-name" class="form-label">Nome</label>
+                        <input type="text" class="form-control" id="edit-name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-email" class="form-label">E-mail</label>
+                        <input type="email" class="form-control" id="edit-email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-document" class="form-label">CPF</label>
+                        <input type="text" class="form-control" id="edit-document" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-specialty" class="form-label">Especialidade</label>
+                        <input type="text" class="form-control" id="edit-specialty" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Atualizar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

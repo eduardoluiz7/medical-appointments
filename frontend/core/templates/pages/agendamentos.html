@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center">
+        <h2>Agendamentos</h2>
+        <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#novoAgendamentoModal">
+            <i class="bi bi-plus"></i>
+            Novo Agendamento
+        </button>
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Profissional_id</th>
+                <th>Procedimento_id</th>
+                <th>Paciente_id</th>
+                <th>Sala_id</th>
+                <th>Data</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for agendamento in agendamentos %}
+
+                {% if agendamento.status == CONFIRMED %}
+                <tr data-id="{{ agendamento.id }}">
+                    <td>{{ agendamento.professional }}</td>
+                    <td>{{ agendamento.procedure }}</td>
+                    <td>{{ agendamento.paciente }}</td>
+                    <td>{{ agendamento.room }}</td>
+                    <td>{{ agendamento.date }}</td>
+                    <td>
+                        <a 
+                        href="#" 
+                        class="btn btn-warning btn-sm"
+                        data-bs-toggle="modal"
+                        data-bs-target="#editarAgendamentoModal"
+                        data-id="{{ agendamento.id }}" 
+                        data-profissional="{{ agendamento.profissional }}" 
+                        data-procedimento="{{ agendamento.procedimento }}" 
+                        data-paciente="{{ agendamento.paciente }}" 
+                        data-sala="{{ agendamento.sala }}"
+                        data-data="{{ agendamento.data }}">
+                            <i class="bi bi-pencil"></i>
+                            Editar
+                        </a>
+                        <a 
+                        href="#" 
+                        class="btn btn-danger btn-sm delete-button"
+                        data-id="{{ agendamento.id }}"
+                        data-bs-toggle="modal"
+                        data-bs-target="#confirmarExclusaoModal">
+                            <i class="bi bi-trash"></i>
+                            Deletar
+                        </a>
+                        <a 
+                        href="#" 
+                        class="btn btn-info btn-sm cancel-button"
+                        data-id="{{ agendamento.id }}">
+                            <i class="bi bi-trash"></i>
+                            Cancelar
+                        </a>
+                    </td>
+                </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal para criar novo agendamento -->
+<div class="modal fade" id="novoAgendamentoModal" tabindex="-1" aria-labelledby="novoAgendamentoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="novoAgendamentoModalLabel">Novo Agendamento</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="novoAgendamentoForm">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="profissional" class="form-label">Profissional</label>
+                        <select id="profissional" class="form-control" required></select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="procedimento" class="form-label">Procedimento</label>
+                        <select id="procedimento" class="form-control" required></select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="paciente" class="form-label">Paciente</label>
+                        <select id="paciente" class="form-control" required></select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="sala" class="form-label">Sala</label>
+                        <select id="sala" class="form-control" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="datetimepicker">Selecione a data e hora</label>
+                        <div class="input-group date" id="datetimepicker" data-target-input="nearest">
+                            <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker"/>
+                            <div class="input-group-append" data-target="#datetimepicker" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="bi bi-calendar"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para editar agendamento -->
+<div class="modal fade" id="editarAgendamentoModal" tabindex="-1" aria-labelledby="editarAgendamentoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editarAgendamentoModalLabel">Editar Agendamento</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editarAgendamentoForm">
+                    <input type="hidden" id="edit-agendamento-id">
+                    <div class="mb-3">
+                        <label for="edit-profissional" class="form-label">Profissional</label>
+                        <select id="edit-profissional" class="form-control" required></select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-procedimento" class="form-label">Procedimento</label>
+                        <select id="edit-procedimento" class="form-control" required></select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-paciente" class="form-label">Paciente</label>
+                        <select id="edit-paciente" class="form-control" required></select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-sala" class="form-label">Sala</label>
+                        <select id="edit-sala" class="form-control" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="datetime">Selecionar Data e Hora:</label>
+                        <div class="input-group date" id="datetimepicker" data-target-input="nearest">
+                            <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker" name="appointment_datetime"/>
+                            <div class="input-group-append" data-target="#datetimepicker" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Atualizar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
