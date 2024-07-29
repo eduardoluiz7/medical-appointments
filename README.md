@@ -4,7 +4,7 @@
 ```bash
 medical_appointments/
 ├── api/
-│   ├── appointments/
+│   ├── appointments_api/
 │   ├   ├───settings.py
 │   └── ...
 ├── frontend/
