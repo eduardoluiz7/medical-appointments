@@ -29,6 +29,11 @@ medical_appointments/
     docker-compose exec api python manage.py migrate
     docker-compose exec frontend python manage.py migrate
   ```
+  #### Portas
+  ```bash
+    localhost:8000 (back)
+    localhost:8001 (front)
+  ```
 
 ### Dependências
   #### Requisitos
